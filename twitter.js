@@ -1,17 +1,29 @@
-const login = async (page, email, password) => {
+const login = async (page, email, username, password) => {
   await open(page, 'https://twitter.com/login');
-  await typeText(page, 'input[name=session\\5busername_or_email\\5d]', email);
-  await typeText(page, 'input[name=session\\5bpassword\\5d]', password);
-  const [loginButton] = await page.$x(
-    '//*[@id="react-root"]/div/div/div[2]/main/div/div/form/div/div[3]/div'
+  await typeText(
+    page,
+    'input[name=session\\5busername_or_email\\5d]',
+    username
   );
-  loginButton.click();
+  await typeText(page, 'input[name=session\\5bpassword\\5d]', password);
+
+  await click(
+    page,
+    '#react-root > div > div > div.css-1dbjc4n.r-1pi2tsx.r-13qz1uu.r-417010 > main > div > div > form > div > div:nth-child(8) > div'
+  );
+
+  if ((await page.$('#challenge_response')) !== null) {
+    await typeText(page, '#challenge_response', email);
+    await click(page, '#email_challenge_submit');
+  }
+
   await waitForPageChange(page);
-  console.log(`Logged in successfully to: ${email}`);
+
+  console.log(`Logged in successfully to: ${username}`);
 };
 
 const tweet = async (page, tweet) => {
-  await open(page, 'https://twitter.com/compose/tweet');
+  await page.goto('https://twitter.com/compose/tweet');
   await focus(page, '.public-DraftEditor-content');
   await page.keyboard.type(tweet);
   await click(page, 'div[data-testid=tweetButton]');
