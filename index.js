@@ -10,8 +10,8 @@ const { login, tweet } = require('./twitter');
   const page = await browser.newPage();
 
   await login(page, user.email, user.username, user.password);
-  await page.screenshot({ path: 'login.png' });
+  await page.screenshot({ path: 'screenshots/login.png' });
   await tweet(page, text);
-  await page.screenshot({ path: 'tweet.png' });
+  await page.screenshot({ path: 'screenshots/tweet.png' });
   await browser.close();
 })();
