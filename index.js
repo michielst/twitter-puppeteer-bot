@@ -3,7 +3,10 @@ const user = require('./credentials.json');
 const { login, tweet } = require('./twitter');
 
 (async () => {
-  const text = process.argv[2];
+  process.argv.shift(); // skip node.exe
+  process.argv.shift(); // skip name of js file
+  const text = process.argv.join(' ');
+
   const browser = await puppeteer.launch({
     args: ['--no-sandbox']
   });
